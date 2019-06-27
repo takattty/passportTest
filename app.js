@@ -25,15 +25,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(passport.initialize());
 var LocalStrategy = require('passport-local').Strategy;
+
 passport.use(new LocalStrategy({
   usernameField: 'username',
-  passwordField: 'password',
+  passwordField: 'password',//この２つは、login.jadeのform-controlと同じにしないといけない。
   passReqToCallback: true,
   session: false,
 }, function (req, username, password, done) {
   process.nextTick(function () {
+    //ここから下で認証の成功条件を指定。
     if (username === "test" && password === "test") {
-      return done(null, username)
+      return done(null, username)//成功した場合、doneメソッドでpassportに対して成功を伝える。
     } else {
       console.log("login error")
       return done(null, false, { message: 'パスワードが正しく有りません' })
@@ -41,7 +43,7 @@ passport.use(new LocalStrategy({
   })
 }));
 
-
+//この下の2つよりも上にpassportの処理を書かないとエラーが発生してしまうそう。
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
