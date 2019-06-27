@@ -19,7 +19,7 @@ router.get('/login', function(req, res) {
 router.post('/login', passport.authenticate('local',
   {successRedirect: '/',
   failureRedirect: '/login',
-  session: false}));
+  session: true}));//こちらをtrueにする事で、sessionを有効にしている。
 
 router.get('/logout', function(req, res) {
   req.logout();

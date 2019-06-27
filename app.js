@@ -6,11 +6,14 @@ var logger = require('morgan');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+console.log('Server Start!');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,8 +25,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+//セッションミドルウェアの設定
+app.use(session({ resave:false,seveUninitialized:false, secret: 'passport test'}));
 app.use(passport.initialize());
+app.use(passport.session());
 var LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy({
@@ -35,13 +40,21 @@ passport.use(new LocalStrategy({
   process.nextTick(function () {
     //ここから下で認証の成功条件を指定。
     if (username === "test" && password === "test") {
-      return done(null, username)//成功した場合、doneメソッドでpassportに対して成功を伝える。
+      return done(null, username)//成功した場合、doneメソッドでpassportに対して成功を伝える。このusernameがpassport.serializaUser関数のコールバック関数の第一引数に渡る。
     } else {
       console.log("login error")
       return done(null, false, { message: 'パスワードが正しく有りません' })
     }
   })
 }));
+
+passport.serializeUser(function (user, done) {
+    done(null, user);//この関数でシリアライズして保存される。
+});
+
+passport.deserializeUser(function (user, done) {
+    done(null, user);
+});
 
 //この下の2つよりも上にpassportの処理を書かないとエラーが発生してしまうそう。
 app.use('/', indexRouter);
