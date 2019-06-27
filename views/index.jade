@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  if  (!user)
+  a(href="/login") Login
+  br
+  if (user)
+  p Welcome to #{user}
+  a(href="/logout") Logout
