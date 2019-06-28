@@ -1,17 +1,17 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const passport = require('passport');
 
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var session = require('express-session');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+const app = express();
 
 console.log('Server Start!');
 
@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ resave:false,seveUninitialized:false, secret: 'passport test'}));
 app.use(passport.initialize());
 app.use(passport.session());
-var LocalStrategy = require('passport-local').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy({
   usernameField: 'username',
